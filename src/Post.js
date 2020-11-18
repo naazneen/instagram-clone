@@ -2,6 +2,12 @@ import React from 'react';
 import postimg from './postimg.png';
 import './Post.css';
 import Avatar from "@material-ui/core/Avatar";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 function Post({username,caption,imageUrl}) {
   return (
@@ -13,7 +19,7 @@ function Post({username,caption,imageUrl}) {
        src="/static/images/avatar/naazweb.png"
        />
 
-   
+        
        <h3>{username}</h3>
        {/* header*/}
        </div>

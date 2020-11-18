@@ -50,3 +50,10 @@ padding:20px;
     transform: rotate(360deg);
   }
 }
+
+.app__signup{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
