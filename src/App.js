@@ -230,6 +230,7 @@ return (
         <Button onClick={() => auth.signOut()}> Logout</Button>
       ):
       <div className="app__loginContainer">
+        {/* Check again */}
          {/* in branch1 */}
       <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
       <Button onClick={() => setOpen(true)}>Sign Up</Button>
