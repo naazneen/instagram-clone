@@ -239,7 +239,8 @@ src={logo1} />
 <h1>You got it, Girrl!</h1>
 <p>Let's build instagram clone!</p>
 { user? (
-  <Button onClick={() => auth.signOut()}> Logout</Button>
+  // Branch2 edits 
+  <Button onClick={() => auth.signOut()}> Sign Out</Button>
 ):
 <div className="app__loginContainer">
 <Button onClick={() => setOpenSignIn(true)}>Log In</Button>
