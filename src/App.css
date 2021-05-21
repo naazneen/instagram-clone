@@ -32,11 +32,25 @@ background-color:#fafafa;
 */
 .app__headerImage{
 object-fit:contain;
+background-color:white;
+font-family: billabong;
+padding:20px;
+font-size: 69px;
+
 }
 .app__header{
 object-fit:contain;
-backgound-color:white;
+background-color:white;
+font-family: billabong;
 padding:20px;
+font-size: 69px;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+/*
+position:fixed;
+top: 0;
+*/
 }
 .App-link {
   color: #61dafb;
@@ -54,6 +68,25 @@ padding:20px;
 .app__signup{
   display: flex;
   flex-direction: column;
-  text-align: center;
 }
-
+@font-face {
+  font-family: billabong;
+  src: url(Billabong.ttf);
+  font-weight: bold;
+}
+.app__bottom{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+  justify-content: center;
+  text-align: center;
+  padding: 2px;
+  
+}
+/*
+.app__content{
+  position: absolute;
+  top: 120px;
+}
+*/

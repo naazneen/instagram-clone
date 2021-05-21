@@ -62,41 +62,37 @@ function App() {
   // User
   const [user,setUser] = useState(null);
   
-useEffect(() => {
- const unsubscribe = auth.onAuthStateChanged((authUser) =>{
-  
-  if (authUser)
-  {
-    // logged in
-    console.log(authUser);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) =>{
+     if (authUser)
+     {
    
-    setUser(authUser);
-    if(authUser.displayName){
-      // don't update
-     
+       setUser(authUser);
+    
+       if(authUser.displayName){
+         // don't update
+         console.log("inside if")
+       }
+       else{
+         // if new user.. // add username as displayname
+         console.log("else");
+        
+       }
+       //console.log("here",authUser.displayName);
+     }
+     else{
+    setUser(null);
     }
-    else{
-      // if new user.. // add username as displayname
-      console.log("here2",authUser.displayName);
-      return authUser.updateProfile({
-        displayName:username,
-      });
-    }
-  }
-  else{
- // logges out 
- setUser(null);
-  }
-
-return () => {
-  // perform cleanup
-  unsubscribe();
-}
-
-})
-}, [user,username]);
-
-
+   
+   return () => {
+     // perform cleanup
+     unsubscribe();
+   }
+   
+   })
+   }, [user,username]);
+   
 
 
   // post is array
@@ -104,7 +100,7 @@ return () => {
 // useEffect code run on specific condition.
 
 useEffect(() => {
-db.collection('posts').onSnapshot(snapshot =>{
+db.collection('posts').orderBy('timestamp',"desc").onSnapshot(snapshot =>{
   setPosts(snapshot.docs.map(doc =>  (
     {
       id: doc.id,
@@ -115,24 +111,32 @@ db.collection('posts').onSnapshot(snapshot =>{
 // [post] once when post is added
 
 const signUp = (event) => {
-  
   event.preventDefault();
-
   auth
   .createUserWithEmailAndPassword(email,password)
   .then((authUser) => {
-    return authUser.user.updateProfile({
-      displayName:username
-    })
+    
+    authUser.user.updateProfile({
+      displayName: username,
+      //photoURL: "https://example.com/jane-q-user/profile.jpg"
+    }).then(function() {
+      // Update successful.
+      console.log("set success1",authUser.user.displayName);
+      auth.signOut();
+    }).catch(function(error) {
+      // An error happened.
+      console.log("in error")
+    });
+    
   })
-  .catch((error) => alert(error.message))
+  .catch((error) => alert(error.message));
   setOpen(false); // close modal
+ 
 }
 
 
 const signIn = (event) => {
   event.preventDefault();
-  
   auth
   .signInWithEmailAndPassword(email,password)
   .catch((error) => alert(error.message))
@@ -140,24 +144,12 @@ const signIn = (event) => {
   // close modal
 }
 
+
 return (
     <div className="app"> 
-    <Router>
-      <h4><Link to="/about">About</Link></h4>
-      <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-      </Switch>
-    </Router>
+
       {/* caption input, file picker, post button*/}
-      {user?(
-        
- <ImageUpload username={user.displayName} />
      
-      ): (
-        <h3>Login to Upload Image</h3>
-      )}
        <Modal
       open={openSignIn}
       onClose={() => setOpenSignIn(false)}>
@@ -165,9 +157,9 @@ return (
       <h2></h2>
       <form className="app__signup">
       <center>
-      <img 
-        className="app_headerImage" 
-        src={logo1} />
+      <div className="app__headerImage">
+       Opengram
+       </div>
 
 <Input 
       placeholder="email" 
@@ -198,9 +190,9 @@ return (
       <h2></h2>
       <form className="app__signup">
       <center>
-      <img 
-        className="app_headerImage" 
-        src={logo1} />
+      <div className="app__headerImage">
+       Opengram
+       </div>
 
       <Input 
       placeholder="username" 
@@ -231,22 +223,19 @@ return (
       </form>
     </div>
       </Modal>
-<div className="app__header">
-<img 
-className="app_headerImage" 
-src={logo1} />
-</div>
-<h1>You got it, Girrl!</h1>
-<p>Let's build instagram clone!</p>
-{ user? (
-  <Button onClick={() => auth.signOut()}> Logout</Button>
-):
-<div className="app__loginContainer">
-<Button onClick={() => setOpenSignIn(true)}>Log In</Button>
-<Button onClick={() => setOpen(true)}>Sign Up</Button>
-
-</div>
-}
+      <div className="app__header">
+       Opengram
+      
+      { user? (
+        <Button onClick={() => auth.signOut()}> Logout</Button>
+      ):
+      <div className="app__loginContainer">
+         {/* in branch1 */}
+      <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+      <Button onClick={() => setOpen(true)}>Sign Up</Button>
+      </div>
+      } 
+      </div>
  
       {/* urls from public 
       <Post username="NaazWeb" caption="You're doing great!" imageUrl="/images/postimg.png" />
@@ -255,12 +244,22 @@ src={logo1} />
       <Post />
       <Post />
 */}
-
+    <div className="app__content">
       {  //id refresh only once
         posts.map(({id,post}) => (
           <Post key={id} username={post.username} caption = {post.caption} imageUrl = {post.imageUrl}/>
         ))
       }
+      </div>
+      <div className="app__bottom">
+      {user?(
+       // console.log("here?",user.displayName)
+        <ImageUpload username={user.displayName} />
+     
+      ): (
+        <h3>Login to Upload Image</h3>
+      )}
+      </div>
     </div>
   ); 
 }

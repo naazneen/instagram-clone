@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core'
 import React,  {useState} from 'react'
 import {storage, db} from "./firebase";
 import firebase from "firebase";
-
+import './ImageUpload.css';
 function ImageUpload({username})
 {
     const [caption, setCaption] = useState('');
@@ -15,6 +15,7 @@ function ImageUpload({username})
         }
     };
     const handleUpload = () => {
+        console.log("username with:",username);
         const uploadTask = storage.ref(`images/${image.name}`).put(image);
         uploadTask.on(
             "state_changed",
@@ -53,7 +54,7 @@ function ImageUpload({username})
         );
     };
     return (
-        <div>
+        <div className="imageupload">
             
                {/* caption input, file picker, post button*/}
             <input type="text" placeholder="Enter a caption" value={caption} onChange={event => setCaption(event.target.value)} />
